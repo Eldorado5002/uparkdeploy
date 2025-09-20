@@ -11,13 +11,48 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*', // You can restrict this to your frontend domain in production
-    methods: ['GET', 'POST']
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    credentials: false
   }
 });
 
-app.use(cors());
-app.use(express.json()); // For parsing JSON requests if needed
+// Enhanced CORS configuration for all HTTP requests
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  credentials: false
+}));
+
+// Additional security headers for production
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
+app.use(express.json({ limit: '50mb' })); // For parsing JSON requests
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Request logging middleware (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    console.log(`📝 ${new Date().toISOString()} - ${req.method} ${req.path} from ${req.ip}`);
+    if (req.body && Object.keys(req.body).length > 0) {
+      console.log('   Body:', JSON.stringify(req.body, null, 2));
+    }
+    next();
+  });
+}
 
 // MQTT Setup
 const MQTT_BROKER = 'mqtt://broker.hivemq.com';
@@ -298,6 +333,10 @@ if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
   try {
+    // Ensure CORS headers are set
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
+    
     // Test database connection
     const dbTest = await query('SELECT NOW() as current_time');
     
@@ -315,9 +354,12 @@ app.get('/api/health', async (req, res) => {
         has_postgres_url: !!process.env.POSTGRES_URL,
         has_database_url: !!process.env.DATABASE_URL,
         has_twilio_config: !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN)
-      }
+      },
+      cors_test: 'CORS headers should be working'
     });
   } catch (error) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
     res.status(500).json({
       status: 'ERROR',
       timestamp: new Date().toISOString(),
@@ -331,9 +373,27 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
+// Simple CORS test endpoint
+app.get('/api/test', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Content-Type', 'application/json');
+  res.json({
+    message: 'CORS test successful',
+    timestamp: new Date().toISOString(),
+    method: req.method,
+    headers_received: req.headers,
+    user_agent: req.get('User-Agent'),
+    origin: req.get('Origin') || 'No origin header'
+  });
+});
+
 // API routes for OTP signup
 app.post('/api/auth/request-otp', async (req, res) => {
   try {
+    // Ensure CORS headers
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
+    
     const { name, phone } = req.body || {};
     if (!phone) return res.status(400).json({ error: 'phone is required' });
 
@@ -393,12 +453,18 @@ app.post('/api/auth/request-otp', async (req, res) => {
     return res.json({ success: true, devCode: code, expiresAt });
   } catch (err) {
     console.error(err);
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
     return res.status(500).json({ error: 'Internal error' });
   }
 });
 
 app.post('/api/auth/verify-otp', async (req, res) => {
   try {
+    // Ensure CORS headers
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
+    
     const { phone, code } = req.body || {};
     if (!phone || !code) return res.status(400).json({ error: 'phone and code are required' });
     const phoneNorm = String(phone).trim();
