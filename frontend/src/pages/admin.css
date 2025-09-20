@@ -1,0 +1,95 @@
+/* public/admin.css */
+.admin-container {
+    max-width: 1200px;
+}
+
+.admin-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .admin-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .slots-card {
+        grid-column: span 2;
+    }
+}
+
+.control-card, .slots-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.control-card h2, .slots-card h2 {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--light-color);
+    padding-bottom: 10px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.control-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    min-width: 120px;
+}
+
+.control-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.control-button.open {
+    background-color: var(--success-color);
+}
+
+.control-button.close {
+    background-color: var(--danger-color);
+}
+
+.control-button:active {
+    transform: translateY(0);
+}
+
+.status-display {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.status-item {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.status-label {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.admin-grid {
+    margin-top: 20px;
+}

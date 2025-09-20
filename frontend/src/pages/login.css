@@ -1,0 +1,76 @@
+/* login.css */
+form {
+  max-width: 360px;
+  margin: 80px auto;
+  padding: 40px 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+form input {
+  padding: 12px 15px;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+form button {
+  padding: 12px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Generic auth container styling */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.auth-message {
+  color: #333;
+  font-size: 0.9rem;
+}
+.auth-message.dev {
+  color: #0a7;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}

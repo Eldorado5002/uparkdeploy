@@ -1,0 +1,894 @@
+/* Slot Reservation Styles */
+/* SlotReservation.css - Admin Dashboard Style */
+.slot-reservation-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Styling */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+/* Main Layout */
+.admin-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .admin-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .slots-card {
+    grid-column: span 2;
+  }
+}
+
+/* Card Styling */
+.status-card,
+.control-card,
+.slots-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-card h2,
+.control-card h2,
+.slots-card h2 {
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid var(--light-color);
+  padding-bottom: 10px;
+}
+
+/* Availability Display */
+.availability-display {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.count-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.count-display span:first-child {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.count-label {
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+}
+
+/* Status Display */
+.status-display {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.status-item {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.status-item:last-child {
+  margin-bottom: 0;
+}
+
+.status-label {
+  font-weight: bold;
+  color: var(--secondary-color);
+}
+
+/* Parking Grid */
+.parking-grid.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.parking-grid.admin-grid .slot {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.parking-grid.admin-grid .slot.available {
+  background-color: var(--success-color);
+  cursor: pointer;
+}
+
+.parking-grid.admin-grid .slot.available:hover {
+  background-color: #27ae60;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+.parking-grid.admin-grid .slot.reserved {
+  background-color: var(--warning-color);
+  cursor: not-allowed;
+}
+
+.parking-grid.admin-grid .slot.occupied {
+  background-color: var(--danger-color);
+  cursor: not-allowed;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 3px;
+}
+
+/* Message Styling */
+.message {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* User Reservations */
+.user-reservations {
+  margin-top: 30px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-reservations h3 {
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid var(--light-color);
+  padding-bottom: 10px;
+}
+
+.reservations-list {
+  display: grid;
+  gap: 15px;
+}
+
+.reservation-card {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reservation-info {
+  flex-grow: 1;
+}
+
+.reservation-info p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.cancel-btn {
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
+.cancel-btn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* CSS Variables */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --warning-color: #f39c12;
+  --light-color: #ecf0f1;
+  --dark-color: #34495e;
+}
+
+/* Modal Styling - Continue with existing modal styles */
+
+.message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+.message.info {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #3b82f6;
+}
+
+.reservation-section h2 {
+  color: #1f2937;
+  margin-bottom: 20px;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid #e5e7eb;
+}
+
+.legend-color.available {
+  background-color: #10b981;
+}
+
+.legend-color.reserved {
+  background-color: #f59e0b;
+}
+
+.legend-color.occupied {
+  background-color: #ef4444;
+}
+
+/* Parking Grid for Reservations */
+.parking-grid-reservation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.parking-grid-reservation .slot {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+  position: relative;
+  min-height: 80px;
+}
+
+.parking-grid-reservation .slot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.parking-grid-reservation .slot.available {
+  background-color: #10b981;
+  color: white;
+}
+
+.parking-grid-reservation .slot.available:hover {
+  background-color: #059669;
+  border-color: #047857;
+}
+
+.parking-grid-reservation .slot.reserved {
+  background-color: #f59e0b;
+  color: white;
+  cursor: not-allowed;
+}
+
+.parking-grid-reservation .slot.occupied {
+  background-color: #ef4444;
+  color: white;
+  cursor: not-allowed;
+}
+
+.slot-number {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.slot-status {
+  font-size: 11px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* User Reservations */
+.user-reservations {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+/* Booking Profile */
+.booking-profile {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.booking-profile h3 {
+  color: white;
+  margin-bottom: 16px;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.stat-number {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.membership-bronze { color: #cd7f32; }
+.membership-silver { color: #c0c0c0; }
+.membership-gold { color: #ffd700; }
+.membership-platinum { color: #e5e4e2; }
+
+.user-reservations h3 {
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.reservations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reservation-card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reservation-info strong {
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.reservation-info p {
+  margin: 4px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.reservation-info small {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.cancel-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.modal-header button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* Vehicle Selection */
+.vehicles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Duration Selection */
+.duration-selection {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.duration-selection h4 {
+  margin-bottom: 16px;
+  color: #374151;
+}
+
+.duration-controls {
+  margin-bottom: 16px;
+}
+
+.duration-type-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.duration-tab {
+  flex: 1;
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.duration-tab.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.duration-tab:hover:not(.active) {
+  border-color: #3b82f6;
+}
+
+.duration-input {
+  margin-top: 12px;
+}
+
+.duration-input label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.duration-input input {
+  padding: 8px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  width: 80px;
+  font-size: 16px;
+}
+
+.duration-input input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.pricing-info {
+  background: #eff6ff;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #dbeafe;
+}
+
+.pricing-info p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #1e40af;
+}
+
+.vehicle-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vehicle-card:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+
+.vehicle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vehicle-info strong {
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.vehicle-type {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.vehicle-type.tw {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.vehicle-type.fw {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.vehicle-rate {
+  font-weight: bold;
+  color: #059669;
+  font-size: 16px;
+  text-align: right;
+}
+
+.vehicle-rate small {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: normal;
+}
+
+/* Reservation Card Status */
+.status-active { color: #059669; font-weight: bold; }
+.status-cancelled { color: #dc2626; font-weight: bold; }
+.status-completed { color: #3b82f6; font-weight: bold; }
+.status-expired { color: #f59e0b; font-weight: bold; }
+
+/* Booking Summary */
+.booking-summary h4 {
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.booking-details {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.booking-details p {
+  margin: 8px 0;
+  color: #374151;
+  display: flex;
+  justify-content: space-between;
+}
+
+.booking-details p strong {
+  color: #1f2937;
+}
+
+.booking-terms {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fef3c7;
+  border-radius: 6px;
+  border: 1px solid #f59e0b;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #92400e;
+  cursor: pointer;
+}
+
+.terms-checkbox input {
+  margin: 0;
+}
+
+.confirm-booking-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.confirm-booking-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.confirm-booking-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Payment Modal */
+.payment-modal {
+  max-width: 450px;
+}
+
+.payment-step h4 {
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.reservation-details, .payment-details {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.reservation-details p, .payment-details p {
+  margin: 8px 0;
+  color: #374151;
+}
+
+.payment-methods {
+  margin-top: 16px;
+}
+
+.payment-options {
+  margin-top: 12px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.payment-option.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.payment-option input {
+  margin: 0;
+}
+
+.confirm-btn, .pay-btn {
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.confirm-btn:hover, .pay-btn:hover {
+  background-color: #2563eb;
+}
+
+.confirm-btn:disabled, .pay-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.pay-btn {
+  background-color: #059669;
+}
+
+.pay-btn:hover {
+  background-color: #047857;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .parking-grid-reservation {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 15px;
+  }
+  
+  .legend {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .modal {
+    width: 95%;
+    margin: 10px;
+  }
+  
+  .reservation-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
