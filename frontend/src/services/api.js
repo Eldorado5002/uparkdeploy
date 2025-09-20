@@ -1,5 +1,5 @@
 // src/services/api.js
-const API_BASE = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+const API_BASE = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
 export async function requestOtp({ name, phone }) {
   const res = await fetch(`${API_BASE}/api/auth/request-otp`, {
