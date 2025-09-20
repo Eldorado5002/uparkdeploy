@@ -4,7 +4,7 @@ const { Server } = require('socket.io');
 const mqtt = require('mqtt');
 const cors = require('cors');
 const path = require('path');
-const { query, initSchema } = require('./db');
+const { query, initSchema, testConnection } = require('./db');
 require('dotenv').config();
 
 const app = express();
@@ -296,13 +296,39 @@ if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
 }
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV,
-    message: 'Backend server is running'
-  });
+app.get('/api/health', async (req, res) => {
+  try {
+    // Test database connection
+    const dbTest = await query('SELECT NOW() as current_time');
+    
+    res.json({ 
+      status: 'OK', 
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV || 'development',
+      message: 'Backend server is running',
+      database: {
+        connected: true,
+        server_time: dbTest.rows[0].current_time
+      },
+      config: {
+        port: process.env.PORT || 5000,
+        has_postgres_url: !!process.env.POSTGRES_URL,
+        has_database_url: !!process.env.DATABASE_URL,
+        has_twilio_config: !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'ERROR',
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV || 'development',
+      message: 'Health check failed',
+      error: error.message,
+      database: {
+        connected: false
+      }
+    });
+  }
 });
 
 // API routes for OTP signup
@@ -820,6 +846,33 @@ if (process.env.NODE_ENV === 'production') {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+
+// Initialize server with database connection test
+async function startServer() {
+  try {
+    console.log('🚀 Starting UPark Backend Server...');
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    
+    // Test database connection
+    const dbConnected = await testConnection();
+    if (!dbConnected) {
+      console.error('❌ Failed to connect to database. Server will not start.');
+      process.exit(1);
+    }
+    
+    // Start the server
+    server.listen(PORT, () => {
+      console.log(`✅ Server running on port ${PORT}`);
+      console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🧪 Test page: http://localhost:${PORT}/test.html`);
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    process.exit(1);
+  }
+}
+
+startServer();

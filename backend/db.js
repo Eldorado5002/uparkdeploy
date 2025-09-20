@@ -1,15 +1,62 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
-const DEFAULT_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_z1xAysflnL8o@ep-gentle-hall-a1682jlk-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
+// Database connection configuration
+const getDatabaseConfig = () => {
+  // Primary: Use POSTGRES_URL if available
+  if (process.env.POSTGRES_URL) {
+    return {
+      connectionString: process.env.POSTGRES_URL,
+      ssl: { rejectUnauthorized: false }
+    };
+  }
+  
+  // Fallback: Use DATABASE_URL
+  if (process.env.DATABASE_URL) {
+    return {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    };
+  }
+  
+  // Alternative: Use individual environment variables
+  if (process.env.DB_HOST) {
+    return {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT || 5432,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    };
+  }
+  
+  // Error: No database configuration found
+  throw new Error(
+    'No database configuration found. Please set POSTGRES_URL, DATABASE_URL, or individual DB_* environment variables.'
+  );
+};
 
-const pool = new Pool({
-  connectionString: DEFAULT_URL,
-  ssl: { rejectUnauthorized: false },
-});
+const pool = new Pool(getDatabaseConfig());
 
 async function query(text, params) {
   const res = await pool.query(text, params);
   return res;
+}
+
+// Test database connection
+async function testConnection() {
+  try {
+    console.log('🔍 Testing database connection...');
+    const result = await pool.query('SELECT NOW() as current_time, version() as pg_version');
+    console.log('✅ Database connected successfully!');
+    console.log(`   Time: ${result.rows[0].current_time}`);
+    console.log(`   PostgreSQL Version: ${result.rows[0].pg_version.split(' ')[0]}`);
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    return false;
+  }
 }
 
 async function initSchema() {
@@ -92,4 +139,4 @@ async function initSchema() {
   `);
 }
 
-module.exports = { pool, query, initSchema };
+module.exports = { pool, query, initSchema, testConnection };
