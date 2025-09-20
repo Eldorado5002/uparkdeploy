@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPark Backend Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; margin: 10px 5px 0 0; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>UPark Backend API Test</h1>
+    <p>Use this page to test if your backend APIs are working correctly.</p>
+    
+    <button onclick="testHealthCheck()">Test Health Check</button>
+    <button onclick="testRequestOTP()">Test Request OTP</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testHealthCheck() {
+            const resultsDiv = document.getElementById('results');
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                resultsDiv.innerHTML += `<div class="test-result success">✅ Health Check: ${JSON.stringify(data)}</div>`;
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="test-result error">❌ Health Check Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testRequestOTP() {
+            const resultsDiv = document.getElementById('results');
+            try {
+                const response = await fetch('/api/auth/request-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: 'Test User', phone: '+919999999999' })
+                });
+                const data = await response.json();
+                resultsDiv.innerHTML += `<div class="test-result ${response.ok ? 'success' : 'error'}">${response.ok ? '✅' : '❌'} Request OTP: ${JSON.stringify(data)}</div>`;
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="test-result error">❌ Request OTP Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

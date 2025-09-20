@@ -295,6 +295,16 @@ if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
   }
 }
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV,
+    message: 'Backend server is running'
+  });
+});
+
 // API routes for OTP signup
 app.post('/api/auth/request-otp', async (req, res) => {
   try {
@@ -788,11 +798,25 @@ app.post('/api/reservations/cancel', async (req, res) => {
   }
 });
 
-// Serve frontend (disabled for development - frontend runs separately)
-// app.use(express.static(path.join(__dirname, 'client', 'build')));
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-// });
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')));
+  
+  // Catch all handler: send back React's index.html file for any non-API routes
+  app.get('*', (req, res) => {
+    // Only serve index.html for non-API routes
+    if (!req.path.startsWith('/api/')) {
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    } else {
+      res.status(404).json({ error: 'API endpoint not found' });
+    }
+  });
+} else {
+  // Development mode - just handle undefined API routes
+  app.get('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API endpoint not found' });
+  });
+}
 
 // Start server
 const PORT = process.env.PORT || 5000;
