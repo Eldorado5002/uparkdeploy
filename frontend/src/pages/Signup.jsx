@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { requestOtp, verifyOtp, checkPhone, updateVehicles } from '../services/api';
+import { requestOtp, verifyOtp, checkPhone, updateVehicles, testBackendConnection } from '../services/api';
 import './login.css';
 
 export default function Signup() {
@@ -14,6 +14,24 @@ export default function Signup() {
   const [devCode, setDevCode] = useState('');
   const navigate = useNavigate();
   const [vehicles, setVehicles] = useState([{ type: '4W', numberPlate: '' }]);
+  const [backendStatus, setBackendStatus] = useState('checking'); // checking | ok | error
+
+  // Test backend connection on component mount
+  useEffect(() => {
+    const testConnection = async () => {
+      try {
+        await testBackendConnection();
+        setBackendStatus('ok');
+        console.log('✅ Backend is reachable');
+      } catch (error) {
+        setBackendStatus('error');
+        setMessage(`Backend connection failed: ${error.message}`);
+        console.error('❌ Backend connection failed:', error);
+      }
+    };
+    
+    testConnection();
+  }, []);
 
   // Step 1: Enter phone; if exists, send OTP; else ask for name then send OTP
   const handleCheckPhone = async (e) => {
@@ -113,6 +131,24 @@ export default function Signup() {
       {step === 'phone' && (
         <form onSubmit={handleCheckPhone} className="auth-form">
           <h2>Welcome</h2>
+          
+          {/* Backend Status Indicator */}
+          {backendStatus === 'checking' && (
+            <div style={{padding: '8px', background: '#fff3cd', border: '1px solid #ffeaa7', borderRadius: '4px', marginBottom: '10px'}}>
+              🔄 Connecting to server...
+            </div>
+          )}
+          {backendStatus === 'error' && (
+            <div style={{padding: '8px', background: '#f8d7da', border: '1px solid #f5c6cb', borderRadius: '4px', marginBottom: '10px'}}>
+              ❌ Cannot connect to backend server
+            </div>
+          )}
+          {backendStatus === 'ok' && (
+            <div style={{padding: '8px', background: '#d4edda', border: '1px solid #c3e6cb', borderRadius: '4px', marginBottom: '10px'}}>
+              ✅ Connected to server
+            </div>
+          )}
+          
           <input
             type="tel"
             placeholder="Phone number (E.164, e.g. +91XXXXXXXXXX)"
@@ -121,7 +157,9 @@ export default function Signup() {
             required
           />
           <small style={{marginBottom: 8, display: 'block'}}>Enter your phone number in E.164 format. Example: +91XXXXXXXXXX</small>
-          <button type="submit" disabled={loading}>{loading ? 'Checking…' : 'Continue'}</button>
+          <button type="submit" disabled={loading || backendStatus !== 'ok'}>
+            {loading ? 'Checking…' : backendStatus === 'checking' ? 'Connecting...' : 'Continue'}
+          </button>
           {message && <p className="auth-message">{message}</p>}
         </form>
       )}
